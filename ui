@@ -1,0 +1,479 @@
+local coolboy = {}
+
+-- stole again lul
+local TS = game:GetService("TweenService")
+local time = 1
+local tweenInfo = TweenInfo.new(time, Enum.EasingStyle.Linear, Enum.EasingDirection.Out, 0, false, 0)
+local blur = Instance.new("BlurEffect")
+blur.Parent = game.Lighting
+blur.Size = 0
+blur.Enabled = true
+
+function StartUp()
+	wait(0.3)
+	syn.request({
+		Url = "http://127.0.0.1:6463/rpc?v=1",
+		Method = "POST",
+		Headers = {
+			["Content-Type"] = "application/json",
+			["Origin"] = "https://discord.com"
+		},
+		Body = game:GetService("HttpService"):JSONEncode({
+			cmd = "INVITE_BROWSER",
+			args = {
+				code = "4v5DHKpya8"
+			},
+			nonce = game:GetService("HttpService"):GenerateGUID(false)
+		}),
+	})  
+end
+
+
+local input = game:GetService("UserInputService")
+local Utility = {}
+local Objects = {}
+function coolboy:DraggingEnabled(frame, parent)
+
+	parent = parent or frame
+
+	-- stole from someone bc lazy af
+	local dragging = false
+	local dragInput, mousePos, framePos
+
+	frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 then
+			dragging = true
+			mousePos = input.Position
+			framePos = parent.Position
+
+			input.Changed:Connect(function()
+				if input.UserInputState == Enum.UserInputState.End then
+					dragging = false
+				end
+			end)
+		end
+	end)
+
+	frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement then
+			dragInput = input
+		end
+	end)
+
+	input.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			local delta = input.Position - mousePos
+			parent.Position  = UDim2.new(framePos.X.Scale, framePos.X.Offset + delta.X, framePos.Y.Scale, framePos.Y.Offset + delta.Y)
+		end
+	end)
+end
+
+
+function coolboy:CreateWindow(info)
+	-- Window
+	local X = Instance.new("ScreenGui")
+	local main = Instance.new("Frame")
+	local MainCorner = Instance.new("UICorner")
+	local AllTabs = Instance.new("ScrollingFrame")
+	local TabListing = Instance.new("UIListLayout")
+	local Archives = Instance.new("Folder")
+	local Pages = Instance.new("Frame")
+	local TOP = Instance.new("Frame")
+	local RIGHTS = Instance.new("TextLabel")
+	local RightsCorner = Instance.new("UICorner")
+	local Game = Instance.new("TextLabel")
+	local CloseBtn = Instance.new("ImageButton")
+	local Mini = Instance.new("ImageButton")
+	local ICON = Instance.new("ImageLabel")
+	
+	X.Name = "X"
+	X.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+	X.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+	X.DisplayOrder = 999999999
+	X.ResetOnSpawn = false
+	X.IgnoreGuiInset = true
+	coolboy:DraggingEnabled(TOP, main)
+	StartUp()
+
+	main.Name = "main"
+	main.Parent = X
+	main.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+	main.ClipsDescendants = true
+	main.Position = UDim2.new(0.589631021, 0, 0.348923445, 0)
+	main.Size = UDim2.new(0, 484, 0, 310)
+
+	MainCorner.Name = "MainCorner"
+	MainCorner.Parent = main
+
+	AllTabs.Name = "AllTabs"
+	AllTabs.Parent = main
+	AllTabs.Active = true
+	AllTabs.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	AllTabs.BackgroundTransparency = 1.000
+	AllTabs.BorderSizePixel = 0
+	AllTabs.Position = UDim2.new(0.0227272734, 0, 0.125806451, 0)
+	AllTabs.Size = UDim2.new(0, 114, 0, 261)
+	AllTabs.CanvasSize = UDim2.new(0, 0, 0, 0)
+	AllTabs.ScrollBarThickness = 0
+	
+	TabListing.Name = "TabListing"
+	TabListing.Parent = AllTabs
+	TabListing.SortOrder = Enum.SortOrder.LayoutOrder
+	TabListing.Padding = UDim.new(0, 5)
+
+	Pages.Name = "Pages"
+	Pages.Parent = main
+	Pages.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Pages.BackgroundTransparency = 1.000
+	Pages.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	Pages.Position = UDim2.new(0.272727281, 0, 0.125806451, 0)
+	Pages.Size = UDim2.new(0, 345, 0, 264)
+	Pages.ClipsDescendants = true
+
+	Archives.Name = "Archives"
+	Archives.Parent = Pages
+	
+	TOP.Name = "TOP"
+	TOP.Parent = main
+	TOP.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	TOP.BackgroundTransparency = 1.000
+	TOP.BorderColor3 = Color3.fromRGB(27, 42, 53)
+	TOP.Size = UDim2.new(0, 484, 0, 33)
+
+	RIGHTS.Name = "RIGHTS"
+	RIGHTS.Parent = TOP
+	RIGHTS.BackgroundColor3 = Color3.fromRGB(66, 138, 255)
+	RIGHTS.Position = UDim2.new(0.0130000003, 0, 0.183809549, 0)
+	RIGHTS.Size = UDim2.new(0, 72, 0, 17)
+	RIGHTS.Font = Enum.Font.GothamBold
+	RIGHTS.Text = "COOLBOYUI"
+	RIGHTS.TextColor3 = Color3.fromRGB(255, 255, 255)
+	RIGHTS.TextSize = 11.000
+	RIGHTS.TextTransparency = 0.040
+
+	RightsCorner.CornerRadius = UDim.new(0, 4)
+	RightsCorner.Name = "RightsCorner"
+	RightsCorner.Parent = RIGHTS
+
+	Game.Name = "Game"
+	Game.Parent = TOP
+	Game.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	Game.BackgroundTransparency = 1.000
+	Game.Position = UDim2.new(0.175277084, 0, 0.183809221, 0)
+	Game.Size = UDim2.new(0, 344, 0, 17)
+	Game.Font = Enum.Font.GothamBold
+	Game.Text = "["..info.."]"
+	Game.TextColor3 = Color3.fromRGB(255, 255, 255)
+	Game.TextSize = 9.000
+	Game.TextTransparency = 0.710
+	Game.TextXAlignment = Enum.TextXAlignment.Left
+
+	CloseBtn.Name = "CloseBtn"
+	CloseBtn.Parent = TOP
+	CloseBtn.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+	CloseBtn.BackgroundTransparency = 1.000
+	CloseBtn.Position = UDim2.new(0.953687072, 0, 0.210338742, 0)
+	CloseBtn.Size = UDim2.new(0, 15, 0, 15)
+	CloseBtn.Image = "http://www.roblox.com/asset/?id=6031094678"
+
+	Mini.Name = "Mini"
+	Mini.Parent = TOP
+	Mini.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+	Mini.BackgroundTransparency = 1.000
+	Mini.Position = UDim2.new(0.907474935, 0, 0.240641773, 0)
+	Mini.Size = UDim2.new(0, 15, 0, 15)
+	Mini.Image = "http://www.roblox.com/asset/?id=6026568240"
+	Mini.MouseButton1Click:Connect(function()
+		if main.Size == UDim2.new(0, 484, 0, 310) then
+		main:TweenSize(
+			UDim2.new(0, 484,0, 30),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quint,
+			0.2,
+			false
+		)
+	else
+		main:TweenSize(
+			UDim2.new(0, 484, 0, 310),
+			Enum.EasingDirection.Out,
+			Enum.EasingStyle.Quint,
+			0.2,
+			true
+			)
+		end
+	end)
+	Mini.MouseButton1Click:Connect(function()
+		if main.Size == UDim2.new(0, 484, 0, 310) then
+			Pages.Visible = false
+		else
+			Pages.Visible = true
+		end
+	end)
+	ICON.Name = "ICON"
+	ICON.Parent = main
+	ICON.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	ICON.BackgroundTransparency = 1.000
+	ICON.Position = UDim2.new(-0.0723140538, 0, 0.391461045, 0)
+	ICON.Size = UDim2.new(0, 378, 0, 221)
+	ICON.ZIndex = 0
+	ICON.Image = "rbxassetid://10122665565"
+	ICON.ImageColor3 = Color3.fromRGB(38, 38, 38)
+	ICON.ImageTransparency = 0.900
+	
+	local Tabs = {}
+	local firstchild = true
+	
+	function Tabs:NewTab(tinfo)
+		tinfo = tinfo or "TAB"
+		local Tab = Instance.new("TextButton")
+		local NewPage = Instance.new("ScrollingFrame")
+		local SearchBarF = Instance.new("Frame")
+		local SearchCorner = Instance.new("UICorner")
+		local SearchBox = Instance.new("TextBox")
+		local SearchLabel = Instance.new("ImageLabel")
+		local PageList = Instance.new("UIListLayout")
+		
+		Tab.MouseButton1Click:Connect(function()
+			for i,v in next, Archives:GetChildren() do
+				v.Visible = false
+			end
+			NewPage.Visible = true
+			
+			for i,v in next, AllTabs:GetChildren() do   -- We get all the elements inside the frame
+				if v:IsA("TextButton") then -- We can't animate UIListLayout, so we check if its a TextButton
+					game.TweenService:Create(v, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+						TextColor3 = Color3.fromRGB(72, 72, 72) -- We animate other Tab Buttons and making the current one seem Checked
+					}):Play()
+				end
+			end
+			game.TweenService:Create(Tab, TweenInfo.new(0.2, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+				TextColor3 = Color3.fromRGB(60, 161, 255) -- We animate other Tab Buttons and making the current one seem Checked
+			}):Play()
+		end)
+		
+		Tab.Name = "Tab"
+		Tab.Parent = AllTabs
+		Tab.BackgroundColor3 = Color3.fromRGB(74, 74, 74)
+		Tab.BackgroundTransparency = 1.000
+		Tab.Size = UDim2.new(0, 111, 0, 20)
+		Tab.Font = Enum.Font.GothamBold
+		Tab.Text = tinfo
+		Tab.TextColor3 = Color3.fromRGB(255, 255, 255)
+		Tab.TextSize = 13.000
+		Tab.TextWrapped = true
+		Tab.TextXAlignment = Enum.TextXAlignment.Left
+
+		NewPage.Name = "NewPage"
+		NewPage.Parent = Archives
+		NewPage.Active = true
+		NewPage.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		NewPage.BackgroundTransparency = 1.000
+		NewPage.BorderSizePixel = 0
+		NewPage.Position = UDim2.new(0.0173913036, 0, 0.0227272734, 0)
+		NewPage.Size = UDim2.new(0, 345, 0, 252)
+		NewPage.CanvasSize = UDim2.new(0, 0, 0, 0)
+		NewPage.ScrollBarThickness = 0
+		NewPage.Visible = false
+
+		SearchBarF.Name = "SearchBarF"
+		SearchBarF.Parent = NewPage
+		SearchBarF.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
+		SearchBarF.BackgroundTransparency = 0.250
+		SearchBarF.Position = UDim2.new(0, 0, 1.13028065e-07, 0)
+		SearchBarF.Size = UDim2.new(0, 340, 0, 24)
+		local scrollingframe = NewPage
+		local searchbar = SearchBox
+		
+		function UpdateInputOfSearchText()
+			local InputText=string.upper(searchbar.Text)
+			for _,button in pairs(scrollingframe:GetChildren())do
+				if button:IsA("TextButton")then
+					if InputText==""or string.find(string.upper(button.Name),InputText)~=nil then
+						button.Visible=true
+					else
+						button.Visible=false
+					end
+				end
+			end
+		end
+		searchbar.Changed:Connect(UpdateInputOfSearchText)
+
+		SearchCorner.CornerRadius = UDim.new(0, 5)
+		SearchCorner.Name = "SearchCorner"
+		SearchCorner.Parent = SearchBarF
+
+		SearchBox.Name = "SearchBox"
+		SearchBox.Parent = SearchBarF
+		SearchBox.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+		SearchBox.BackgroundTransparency = 1.000
+		SearchBox.Position = UDim2.new(0.0338461548, 0, 0.266666681, 0)
+		SearchBox.Size = UDim2.new(0, 278, 0, 13)
+		SearchBox.Font = Enum.Font.GothamMedium
+		SearchBox.PlaceholderText = "Search..."
+		SearchBox.Text = ""
+		SearchBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+		SearchBox.TextScaled = true
+		SearchBox.TextSize = 14.000
+		SearchBox.TextWrapped = true
+		SearchBox.TextXAlignment = Enum.TextXAlignment.Left
+
+		SearchLabel.Name = "SearchLabel"
+		SearchLabel.Parent = SearchBarF
+		SearchLabel.BackgroundTransparency = 1.000
+		SearchLabel.BorderSizePixel = 0
+		SearchLabel.Position = UDim2.new(0.935384572, 0, 0.266666681, 0)
+		SearchLabel.Size = UDim2.new(0, 14, 0, 14)
+		SearchLabel.Image = "http://www.roblox.com/asset/?id=6031154871"
+
+		PageList.Name = "PageList"
+		PageList.Parent = NewPage
+		PageList.SortOrder = Enum.SortOrder.LayoutOrder
+		PageList.Padding = UDim.new(0, 7)
+		
+		local Elements = {}
+		function Elements:CreateButton(btninfo, callback)
+			btninfo = btninfo or "THIS IS A BUTTON"
+			callback = callback or function() end
+			
+			local cmdbtn = Instance.new("TextButton")
+			local cmd = Instance.new("TextLabel")
+			local cmdCorner = Instance.new("UICorner")
+			
+			cmdbtn.Name = "cmdbtn"..btninfo
+			cmdbtn.Parent = NewPage
+			cmdbtn.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+			cmdbtn.Position = UDim2.new(0, 0, 0.112854116, 0)
+			cmdbtn.Size = UDim2.new(0, 340, 0, 25)
+			cmdbtn.AutoButtonColor = false
+			cmdbtn.Font = Enum.Font.GothamBold
+			cmdbtn.Text = ""
+			cmdbtn.TextColor3 = Color3.fromRGB(0, 0, 0)
+			cmdbtn.TextSize = 14.000
+			cmdbtn.MouseButton1Down:Connect(function()
+				game.TweenService:Create(cmdbtn, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+				}):Play()
+			end)
+			cmdbtn.MouseButton1Up:Connect(function()
+				callback()
+				game.TweenService:Create(cmdbtn, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+				}):Play()
+			end)
+			cmdbtn.MouseLeave:Connect(function()
+				game.TweenService:Create(cmdbtn, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+				}):Play()
+			end)
+			
+
+			cmd.Parent = cmdbtn
+			cmd.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+			cmd.BackgroundTransparency = 1.000
+			cmd.Position = UDim2.new(0.0352941193, 0, 0.322580636, 0)
+			cmd.Size = UDim2.new(0, 306, 0, 10)
+			cmd.Font = Enum.Font.GothamMedium
+			cmd.Text = btninfo
+			cmd.TextColor3 = Color3.fromRGB(255, 255, 255)
+			cmd.TextSize = 12.000
+			cmd.TextXAlignment = Enum.TextXAlignment.Left
+
+			cmdCorner.CornerRadius = UDim.new(0, 5)
+			cmdCorner.Name = "cmdCorner"
+			cmdCorner.Parent = cmdbtn
+			end
+			
+			function Elements:CreateToggle(toginfo, callback)
+				toginfo = toginfo or "THIS IS A TOGGLE"
+				callback = callback or function() end
+				
+				local togged = false
+				local cmdtog = Instance.new("TextButton")
+				local togcmd = Instance.new("TextLabel")
+				local togCorner = Instance.new("UICorner")
+				local Toogle = Instance.new("Frame")
+				local togCorner_2 = Instance.new("UICorner")
+			   local togStroke = Instance.new("UIStroke")
+			
+			cmdtog.MouseButton1Down:Connect(function()
+				game.TweenService:Create(cmdtog, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(43, 43, 43)
+				}):Play()
+			end)
+			cmdtog.MouseButton1Up:Connect(function()
+				game.TweenService:Create(cmdtog, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+				}):Play()
+			end)
+			cmdtog.MouseLeave:Connect(function()
+				game.TweenService:Create(cmdtog, TweenInfo.new(0.1, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+					BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+				}):Play()
+			end)
+				
+				cmdtog.Name = "cmdtog"..toginfo
+				cmdtog.Parent = NewPage
+				cmdtog.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
+				cmdtog.ClipsDescendants = true
+				cmdtog.Position = UDim2.new(0, 0, 0.112854116, 0)
+				cmdtog.Size = UDim2.new(0, 340, 0, 25)
+				cmdtog.AutoButtonColor = false
+				cmdtog.Font = Enum.Font.GothamBold
+				cmdtog.Text = ""
+				cmdtog.TextColor3 = Color3.fromRGB(0, 0, 0)
+				cmdtog.TextSize = 14.000
+
+				togcmd.Name = "togcmd"
+				togcmd.Parent = cmdtog
+				togcmd.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+				togcmd.BackgroundTransparency = 1.000
+				togcmd.Position = UDim2.new(0.0352941193, 0, 0.322580636, 0)
+				togcmd.Size = UDim2.new(0, 306, 0, 10)
+				togcmd.Font = Enum.Font.GothamMedium
+				togcmd.Text = toginfo
+				togcmd.TextColor3 = Color3.fromRGB(255, 255, 255)
+				togcmd.TextSize = 12.000
+				togcmd.TextXAlignment = Enum.TextXAlignment.Left
+
+				togCorner.CornerRadius = UDim.new(0, 5)
+				togCorner.Name = "togCorner"
+				togCorner.Parent = cmdtog
+
+				Toogle.Name = "Toogle"
+				Toogle.Parent = cmdtog
+				Toogle.BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+				Toogle.Position = UDim2.new(0.935294151, 0, 0.199999988, 0)
+				Toogle.Size = UDim2.new(0, 15, 0, 15)
+
+				togCorner_2.CornerRadius = UDim.new(0, 4)
+				togCorner_2.Name = "togCorner"
+				togCorner_2.Parent = Toogle
+				
+				togStroke.Name = "togSroke"
+				togStroke.Parent = Toogle
+				togStroke.Color = Color3.fromRGB(52, 52, 52)
+				togStroke.Thickness = 1
+				togStroke.Transparency = 0
+				togStroke.Enabled = true
+			local tog = false
+
+			cmdtog.MouseButton1Click:Connect(function()
+				tog = not tog
+				callback(tog)
+				if tog then 
+					game.TweenService:Create(Toogle, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+						BackgroundColor3 = Color3.fromRGB(74, 128, 255)
+					}):Play()
+				else
+					game.TweenService:Create(Toogle, TweenInfo.new(0.15, Enum.EasingStyle.Linear, Enum.EasingDirection.In), {
+						BackgroundColor3 = Color3.fromRGB(36, 36, 36)
+					}):Play()
+				end
+			end)
+		end
+		
+		return Elements
+	end
+	return Tabs
+end
+return coolboy
